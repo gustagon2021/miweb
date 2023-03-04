@@ -1,0 +1,27 @@
+import pyodbc
+import pandas as pd
+import matplotlib.pyplot as plt
+
+server = 'LAPTOP-UQ609SA1\SQLEXPRESS'
+database = 'xxxxx'
+username = 'sa'
+password = 'xxxx'
+driver = '{ODBC Driver 17 for SQL Server}'
+
+cnxn = pyodbc.connect(f"DRIVER={driver};SERVER={server};DATABASE={database};UID={username};PWD={password}")
+
+query = "SELECT TITULAR, COUNT(*) as total FROM LOCALIDADES$ WHERE TITULAR IS NOT NULL GROUP BY TITULAR"
+
+data = pd.read_sql(query, cnxn)
+
+fig, ax = plt.subplots(figsize=(8, 6))
+
+ax.bar(data['TITULAR'], data['total'])
+ax.tick_params(axis='x', rotation=90) # rotar las etiquetas del eje x en 90 grados
+
+ax.set_xlabel('TITULAR')
+ax.set_ylabel('Total')
+ax.set_title('CANTIDAD DE TITULARES DE ESPACIOS')
+
+plt.show()
+
