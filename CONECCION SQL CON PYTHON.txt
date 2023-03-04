@@ -1,0 +1,18 @@
+import pyodbc
+import pandas as pd
+import matplotlib.pyplot as plt
+
+server = 'XXXXXX'
+database = 'ESTUDIO'
+username = 'sa'
+password = 'XXXX'
+driver = '{ODBC Driver 17 for SQL Server}'
+
+cnxn = pyodbc.connect(f"DRIVER={driver};SERVER={server};DATABASE={database};UID={username};PWD={password}")
+
+query = "SELECT Jurisdiccion, COUNT(*) as total  FROM Prejudiciales GROUP BY Jurisdiccion"
+
+data = pd.read_sql(query, cnxn)
+
+plt.pie(data['total'], labels=data['Jurisdiccion'], autopct='%1.1f%%')
+plt.show()
