@@ -1,0 +1,19 @@
+import pyodbc
+import pandas as pd
+import matplotlib.pyplot as plt
+
+server = 'LAPTOP-UQ609SA1\SQLEXPRESS'
+database = 'ESTUDIO'
+username = 'sa'
+password = 'XXXXX'
+driver = '{ODBC Driver 17 for SQL Server}'
+
+cnxn = pyodbc.connect(f"DRIVER={driver};SERVER={server};DATABASE={database};UID={username};PWD={password}")
+
+query = "SELECT Porcentaje, COUNT(*) as total  FROM Judiciales GROUP BY Porcentaje"
+
+data = pd.read_sql(query, cnxn)
+
+plt.pie(data['total'], labels=data['Porcentaje'], autopct='%1.1f%%')
+plt.title("Porcentaje por causas")
+plt.show()
