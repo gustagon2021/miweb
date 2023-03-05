@@ -1,0 +1,24 @@
+import pyodbc
+import pandas as pd
+import matplotlib.pyplot as plt
+
+server = 'LAPTOP-UQ609SA1\SQLEXPRESS'
+database = 'MUNICIPIO'
+username = 'sa'
+password = 'XXXXX'
+driver = '{ODBC Driver 17 for SQL Server}'
+
+cnxn = pyodbc.connect(f"DRIVER={driver};SERVER={server};DATABASE={database};UID={username};PWD={password}")
+
+query = "SELECT LOCALIDADES, COUNT(*) as total  FROM LOCAL$ GROUP BY LOCALIDADES"
+
+data = pd.read_sql(query, cnxn)
+
+data = data.dropna()
+
+plt.bar(data['LOCALIDADES'], data['total'])
+plt.xlabel('LOCALIDADES', fontsize=12)  # aumentar el tamaño de letra de la etiqueta del eje X
+plt.ylabel('Total', fontsize=12)  # aumentar el tamaño de letra de la etiqueta del eje Y
+plt.title('Cantidad espacios publicos por localidad', fontsize=14)  # aumentar el tamaño de letra del título
+plt.xticks(rotation=45, fontsize=8)  # inclinar las etiquetas del eje X y achicar el tamaño de letra
+plt.show()
