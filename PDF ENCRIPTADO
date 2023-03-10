@@ -1,0 +1,28 @@
+import PyPDF2
+
+pdf = input("Ingrese la ruta del archivo PDF que desea proteger: ")
+
+# Abrir el archivo PDF en modo lectura
+with open(pdf, "rb") as archivo_pdf:
+    # Crear objeto de lectura de PDF
+    lector_pdf = PyPDF2.PdfFileReader(archivo_pdf)
+
+    # Pedir contraseña para proteger el archivo
+    password = input("Ingrese la contraseña deseada para proteger el archivo: ")
+
+    # Crear objeto de escritura de PDF
+    writer = PyPDF2.PdfFileWriter()
+
+    # Recorrer cada página del PDF y agregarla al objeto de escritura con protección por contraseña
+    for num_pagina in range(lector_pdf.numPages):
+        pagina = lector_pdf.getPage(num_pagina)
+        writer.addPage(pagina)
+        writer.encrypt(password)
+
+    # Crear un nuevo archivo PDF protegido
+    pdf_protegido = pdf[:-4] + "_protegido.pdf"
+    with open(pdf_protegido, "wb") as archivo_protegido:
+        writer.write(archivo_protegido)
+
+    print(f"El archivo {pdf_protegido} ha sido creado con éxito.")
+
